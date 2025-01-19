@@ -1,0 +1,35 @@
+services:
+  line_provider:
+    container_name: line_provider
+    build:
+      context: ./line_provider
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+
+  bet_maker:
+    container_name: bet_maker
+    build:
+      context: ./bet_maker
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8001:8000"
+
+  postgres:
+    image: postgres:16.4
+    container_name: postgres-container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: bet_maker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
